@@ -1,0 +1,7 @@
+__pycache__
+.DS_Store
+01_thesis/
+04_experiments/02_data/
+04_experiments/01_config/**/*.json
+04_experiments/01_config/**/*.jsonl
+04_experiments/01_config/**/*.duckdb
