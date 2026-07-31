@@ -1,0 +1,24 @@
+@startuml
+
+abstract class BaseRetriever {
+    +Config cfg
+    +{abstract} retrieve(query: Query) : Query
+    +results_to_paragraphs(result) : List<Paragraph>
+}
+
+class SparseRetriever implements BaseRetriever {
+    +SparseRetrieverIndex index
+}
+class HybridRetriever implements BaseRetriever {
+    +SparseRetriever sparseRetriever
+    +DenseRetriever denseRetriever
+}
+class DenseRetriever implements BaseRetriever {
+    +FaissIndex index
+    +SentenceTransformer model
+}
+
+HybridRetriever -left> SparseRetriever
+HybridRetriever -right> DenseRetriever
+
+@enduml

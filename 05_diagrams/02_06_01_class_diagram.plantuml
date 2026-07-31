@@ -1,0 +1,55 @@
+@startuml
+class Paragraph {
+  +document_id
+  +global_id
+  +index
+  +text
+}
+
+class Query {
+  +id
+  +input
+  +reference : List<Paragraph>
+  +answer
+  +retrieved : List<Paragraph>
+  +generated_answer
+  +metrics : Metrics
+}
+
+class Metrics {
+  +abstain
+  +retriever_success
+  +task_success
+  +generator_success
+}
+
+abstract class KnowledgeBase {
+  +{abstract} init_database()
+  +init_index()
+}
+
+abstract class BaseRetriever {
+  +{abstract} retrieve(query: Query) : Query
+  +results_to_paragraphs(result) : List<Paragraph>
+}
+
+abstract class BaseGenerator {
+  +{abstract} generate(query: Query) : Query
+}
+
+abstract class BaseJudge {
+  +{abstract} evaluate(query: Query) : Query
+  +retrieved_correct_document(query) : bool
+  +retrieved_correct_paragraph(query) : bool
+}
+
+Query "1" *-- "0..*" Paragraph : reference
+Query "1" *-- "0..*" Paragraph : retrieved
+Query "1" *-- "1" Metrics
+
+BaseRetriever ..> Query : transforms
+BaseGenerator ..> Query : transforms
+BaseJudge ..> Query : transforms
+BaseRetriever ..> KnowledgeBase : searches
+
+@enduml
